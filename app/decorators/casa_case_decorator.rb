@@ -6,11 +6,18 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def transition_aged_youth_icon
-    object.transition_aged_youth ? "Yes 🐛🦋" : "No"
+    object.transition_aged_youth ? "Yes #{transition_aged_youth_only_icon}" : "No #{transition_aged_youth_only_icon}"
   end
 
   def transition_aged_youth_only_icon
-    object.transition_aged_youth ? "🐛🦋" : ""
+    if object.transition_aged_youth
+      return "🦋" unless object.birth_month_year_youth
+      first_month = object.birth_month_year_youth.month ==  Time.now.month
+      first_year =  object.birth_month_year_youth.year == Time.now.year - 14
+      first_month && first_year ?  "🐛🦋" : "🦋"
+    else
+      "🐛"
+    end
   end
 
   def court_report_submission
